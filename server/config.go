@@ -21,6 +21,7 @@ type TacViewServerConfig struct {
 	Hostname string `json:"hostname"`
 
 	RadarRefreshRate int64  `json:"radar_refresh_rate"`
+	RetryRate        int64  `json:"retry_rate"`
 	Port             int    `json:"port"`
 	Password         string `json:"password"`
 
