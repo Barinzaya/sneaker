@@ -1,5 +1,7 @@
 import { DCSMap } from "./dcs/maps/DCSMap";
 
+export const PATH_PREFIX = '';
+
 const toRad = (n: number) => {
   return (n * Math.PI) / 180;
 };
@@ -168,7 +170,7 @@ export function formatCounter(seconds: number): string {
 
 export function route(path: string): string {
   return process.env.NODE_ENV === "production"
-    ? `/api${path}`
+    ? `${PATH_PREFIX}/api${path}`
     : `http://localhost:7789/api${path}`;
 }
 

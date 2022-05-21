@@ -10,7 +10,7 @@ import { Marianas } from "./dcs/maps/Marianas";
 import { PersianGulf } from "./dcs/maps/PersianGulf";
 import { Syria } from "./dcs/maps/Syria";
 import { Server, serverStore } from "./stores/ServerStore";
-import { route } from "./util";
+import { route, PATH_PREFIX } from "./util";
 
 type ServerMetadata = {
   name: string;
@@ -20,7 +20,7 @@ type ServerMetadata = {
 function ServerOption({ server }: { server: ServerMetadata }) {
   return (
     <Link
-      to={`/servers/${server.name}`}
+      to={`${PATH_PREFIX}/servers/${server.name}`}
       className="p-2 bg-gray-100 hover:bg-gray-200 border-gray-400 border rounded-sm shadow-sm w-full items-center flex flex-row"
     >
       <span className="text-3xl font-bold flex-grow">{server.name} </span>
@@ -39,7 +39,7 @@ function ServerConnectModal() {
     get,
   } = useFetch<Array<ServerMetadata>>(
     process.env.NODE_ENV === "production"
-      ? `/api/servers`
+      ? `${PATH_PREFIX}/api/servers`
       : `http://localhost:7789/api/servers`,
     []
   );
@@ -107,7 +107,7 @@ function ServerContainer({ serverName }: { serverName: string }) {
   }, [server, error, loading]);
 
   if (response.status === 404) {
-    return <Redirect to="/" />;
+    return <Redirect to="${PATH_PREFIX}/" />;
   }
 
   if (error) {
@@ -150,16 +150,16 @@ function App() {
   return (
     <div className="bg-gray-700 max-w-full max-h-full w-full h-full">
       <Switch>
-        <Route exact path="/" component={ServerConnectModal} />
+        <Route exact path={PATH_PREFIX + "/"} component={ServerConnectModal} />
         <Route
           exact
-          path="/servers/:serverName"
+          path={PATH_PREFIX + "/servers/:serverName"}
           render={({
             match: {
               params: { serverName },
             },
           }) => {
-            return <ServerContainer serverName={serverName} />;
+            return <ServerContainer serverName={serverName!} />;
           }}
         />
       </Switch>
