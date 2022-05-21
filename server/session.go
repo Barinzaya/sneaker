@@ -169,10 +169,15 @@ func (s *serverSession) publish(event string, data interface{}) error {
 func (s *serverSession) run() {
 	go s.updateLoop()
 
+	retry := time.Duration(5)
+	if s.server.RetryRate > 0 {
+		retry = time.Duration(s.server.RetryRate)
+	}
+
 	for {
 		err := s.runTacViewClient()
-		log.Printf("[session:%v] tacview client closed, reseting and reopening in 5 seconds (%v)", s.server.Name, err)
-		time.Sleep(time.Second * 5)
+		log.Printf("[session:%v] tacview client closed, resetting and reopening in %d seconds (%v)", s.server.Name, retry, err)
+		time.Sleep(time.Second * retry)
 	}
 }
 
